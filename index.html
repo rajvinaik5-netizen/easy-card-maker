@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Easy Card Maker</title>
+  <meta name="description" content="Easy Card Maker – beautiful AI wedding invitations, birthday cards, anniversary templates, and easy download & share features." />
+  <style>
+    :root{
+      --bg:#fff7fb;
+      --card:#ffffff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --pink:#ff5f8f;
+      --pink2:#ff8fb1;
+      --gold:#f6c56d;
+      --shadow:0 20px 60px rgba(31,41,55,.10);
+      --radius:24px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255,143,177,.18), transparent 28%),
+        radial-gradient(circle at top right, rgba(246,197,109,.18), transparent 25%),
+        linear-gradient(180deg, #fff8fc 0%, #fff 100%);
+      color:var(--text);
+      line-height:1.55;
+    }
+    a{text-decoration:none;color:inherit}
+    .container{width:min(1180px,92%);margin:0 auto}
+    .nav{
+      position:sticky; top:0; z-index:10;
+      backdrop-filter: blur(16px);
+      background: rgba(255,255,255,.72);
+      border-bottom:1px solid rgba(0,0,0,.06);
+    }
+    .nav-inner{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 0;
+      gap:14px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px; font-weight:800;
+      letter-spacing:.2px;
+    }
+    .logo{
+      width:42px;height:42px;border-radius:14px;
+      background: linear-gradient(135deg, var(--pink), #ffb3c7);
+      display:grid; place-items:center;
+      color:white; box-shadow: var(--shadow);
+      font-size:20px;
+    }
+    .brand span{font-size:18px}
+    .pill-row{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
+    .pill{
+      padding:10px 14px; border-radius:999px;
+      background:#fff; border:1px solid rgba(0,0,0,.08);
+      color:var(--muted); font-size:14px;
+    }
+
+    .hero{
+      padding:64px 0 28px;
+      display:grid; grid-template-columns:1.1fr .9fr; gap:28px; align-items:center;
+    }
+    .hero h1{
+      margin:0 0 14px;
+      font-size:clamp(2.2rem,5vw,4.8rem);
+      line-height:1.02;
+      letter-spacing:-.04em;
+    }
+    .hero h1 .accent{
+      background: linear-gradient(135deg, var(--pink), #ff9ab9 45%, var(--gold));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+    .hero p{
+      margin:0 0 22px;
+      font-size:1.05rem;
+      color:var(--muted);
+      max-width:60ch;
+    }
+    .cta-row{display:flex; gap:12px; flex-wrap:wrap}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:14px 20px; border-radius:999px; font-weight:700;
+      border:1px solid transparent;
+    }
+    .btn-primary{
+      background: linear-gradient(135deg, var(--pink), #ff7ea6);
+      color:#fff; box-shadow: var(--shadow);
+    }
+    .btn-ghost{
+      background:#fff; border-color:rgba(0,0,0,.08); color:var(--text);
+    }
+
+    .showcase{
+      background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.75));
+      border:1px solid rgba(0,0,0,.06);
+      border-radius: 32px;
+      box-shadow: var(--shadow);
+      padding:18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .showcase::before,
+    .showcase::after{
+      content:"";
+      position:absolute;
+      border-radius:999px;
+      filter: blur(10px);
+      opacity:.55;
+    }
+    .showcase::before{
+      width:180px;height:180px; background:#ffd8e6; top:-40px; right:-30px;
+    }
+    .showcase::after{
+      width:140px;height:140px; background:#fff0bf; bottom:-30px; left:-20px;
+    }
+    .mock-card{
+      position:relative;
+      border-radius:28px;
+      background:
+        linear-gradient(145deg, rgba(255,95,143,.11), rgba(255,255,255,.95)),
+        #fff;
+      border:1px solid rgba(0,0,0,.06);
+      padding:24px;
+      min-height:430px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap:18px;
+      z-index:1;
+    }
+    .mock-top{display:flex; justify-content:space-between; gap:10px; align-items:flex-start}
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 14px; border-radius:999px;
+      background:#fff; border:1px solid rgba(0,0,0,.06);
+      font-size:13px; color:var(--muted);
+    }
+    .avatar-pair{
+      display:flex; gap:14px; align-items:center; margin-top:10px;
+    }
+    .avatar{
+      width:86px;height:86px;border-radius:28px;
+      background: linear-gradient(135deg, #fff, #ffe1ec);
+      border:1px solid rgba(0,0,0,.06);
+      display:grid; place-items:center;
+      font-size:42px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.08);
+    }
+    .invite-info{
+      display:grid; gap:10px;
+      background: rgba(255,255,255,.78);
+      border:1px solid rgba(0,0,0,.06);
+      border-radius:24px;
+      padding:18px;
+    }
+    .invite-info h3{margin:0;font-size:1.2rem}
+    .invite-info p{margin:0;color:var(--muted)}
+    .mini-grid{
+      display:grid; grid-template-columns:repeat(3,1fr); gap:10px;
+    }
+    .mini{
+      border-radius:18px;
+      padding:14px 10px;
+      background:#fff;
+      border:1px solid rgba(0,0,0,.06);
+      text-align:center;
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .section{padding:34px 0}
+    .section-head{
+      display:flex; justify-content:space-between; align-items:end; gap:18px; margin-bottom:18px;
+    }
+    .section-head h2{
+      margin:0;
+      font-size:clamp(1.5rem,3vw,2.4rem);
+      letter-spacing:-.03em;
+    }
+    .section-head p{margin:0;color:var(--muted);max-width:62ch}
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:18px;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid rgba(0,0,0,.06);
+      border-radius:var(--radius);
+      box-shadow: var(--shadow);
+      padding:18px;
+      min-height:170px;
+    }
+    .card .icon{
+      width:50px;height:50px;border-radius:16px;
+      display:grid;place-items:center;
+      background: linear-gradient(135deg, rgba(255,95,143,.12), rgba(246,197,109,.18));
+      font-size:22px;
+      margin-bottom:12px;
+    }
+    .card h3{margin:0 0 8px;font-size:1.06rem}
+    .card p{margin:0;color:var(--muted);font-size:.95rem}
+
+    .timeline{
+      display:grid;
+      grid-template-columns:repeat(6,1fr);
+      gap:14px;
+    }
+    .step{
+      background: linear-gradient(180deg, #fff, #fff8fb);
+      border:1px solid rgba(0,0,0,.06);
+      border-radius:22px;
+      padding:16px 14px;
+      text-align:center;
+      box-shadow: var(--shadow);
+    }
+    .step .emoji{font-size:28px; margin-bottom:8px}
+    .step strong{display:block; margin-bottom:4px}
+    .step span{color:var(--muted); font-size:13px}
+
+    .share-row{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    .share-panel{
+      background: linear-gradient(135deg, rgba(255,95,143,.10), rgba(255,255,255,.96));
+      border:1px solid rgba(0,0,0,.06);
+      border-radius:32px;
+      padding:22px;
+      box-shadow: var(--shadow);
+    }
+    .action-list{
+      display:grid;
+      gap:12px;
+      margin-top:16px;
+    }
+    .action{
+      background:#fff;
+      border:1px solid rgba(0,0,0,.06);
+      border-radius:18px;
+      padding:14px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+    }
+    .action small{color:var(--muted)}
+    .action strong{display:block}
+    .action .tag{
+      padding:8px 12px; border-radius:999px;
+      background: #fff3f7; color:#d94675; font-weight:700; font-size:13px;
+      white-space:nowrap;
+    }
+
+    .footer{
+      margin-top:26px;
+      padding:26px 0 40px;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    @media (max-width: 980px){
+      .hero,.share-row{grid-template-columns:1fr}
+      .grid{grid-template-columns:repeat(2,1fr)}
+      .timeline{grid-template-columns:repeat(3,1fr)}
+    }
+    @media (max-width: 640px){
+      .pill-row{justify-content:flex-start}
+      .grid,.timeline{grid-template-columns:1fr}
+      .section-head,.nav-inner{align-items:flex-start; flex-direction:column}
+      .hero{padding-top:34px}
+      .mock-card{min-height:auto}
+      .mini-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <div class="container nav-inner">
+      <div class="brand">
+        <div class="logo">✦</div>
+        <span>Easy Card Maker</span>
+      </div>
+      <div class="pill-row">
+        <div class="pill">Wedding Video Invites</div>
+        <div class="pill">Birthday Templates</div>
+        <div class="pill">Anniversary Cards</div>
+        <div class="pill">Easy Download & Share</div>
+      </div>
+    </div>
+  </div>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <h1>Create <span class="accent">aesthetic AI invitations</span> in minutes</h1>
+        <p>
+          Easy Card Maker is a Pinterest-inspired invitation website for Indian weddings,
+          birthdays, anniversaries, and special events. Make beautiful video invitations with
+          editable names, dates, ceremonies, and regional styles.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#templates">Explore Templates</a>
+          <a class="btn btn-ghost" href="#download">Download & Share</a>
+        </div>
+      </div>
+
+      <div class="showcase">
+        <div class="mock-card">
+          <div class="mock-top">
+            <div>
+              <div class="badge">💍 Indian Wedding Video Invite</div>
+              <div class="avatar-pair">
+                <div class="avatar">👰</div>
+                <div class="avatar">🤵</div>
+              </div>
+            </div>
+            <div class="badge">3D Cartoon Style</div>
+          </div>
+
+          <div class="invite-info">
+            <h3>Rahul & Priya</h3>
+            <p>Haldi • Mehendi • Sangeet • Wedding • Reception</p>
+            <div class="mini-grid">
+              <div class="mini"><strong>Haldi</strong><br/>12 June</div>
+              <div class="mini"><strong>Wedding</strong><br/>14 June</div>
+              <div class="mini"><strong>Venue</strong><br/>Goa</div>
+            </div>
+          </div>
+
+          <div class="badge">✨ Editable • Mobile Friendly • Share on WhatsApp</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="templates">
+      <div class="section-head">
+        <div>
+          <h2>Trending templates</h2>
+          <p>Beautiful layouts for wedding, birthday, anniversary, baby shower, engagement, and festive invitations.</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <div class="icon">💍</div>
+          <h3>Royal Indian Wedding</h3>
+          <p>Includes Haldi, Mehendi, Sangeet, Wedding, and Reception scenes.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🎂</div>
+          <h3>Birthday Celebration</h3>
+          <p>Fun, colorful, and modern invitation cards and short videos.</p>
+        </div>
+        <div class="card">
+          <div class="icon">💖</div>
+          <h3>Anniversary Invite</h3>
+          <p>Soft luxury styles with romantic motion and elegant typography.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🌸</div>
+          <h3>Regional Themes</h3>
+          <p>Goan, Maharashtrian, Punjabi, Gujarati, South Indian, and more.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2>Indian wedding journey</h2>
+          <p>Build the invitation like a story: every ceremony shown in a beautiful sequence.</p>
+        </div>
+      </div>
+
+      <div class="timeline">
+        <div class="step"><div class="emoji">💛</div><strong>Haldi</strong><span>Bright and cheerful</span></div>
+        <div class="step"><div class="emoji">🌿</div><strong>Mehendi</strong><span>Floral and artistic</span></div>
+        <div class="step"><div class="emoji">🎶</div><strong>Sangeet</strong><span>Musical and lively</span></div>
+        <div class="step"><div class="emoji">💍</div><strong>Wedding</strong><span>Grand and royal</span></div>
+        <div class="step"><div class="emoji">🥂</div><strong>Reception</strong><span>Elegant and premium</span></div>
+        <div class="step"><div class="emoji">🙏</div><strong>Invite</strong><span>Easy to share</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="download">
+      <div class="section-head">
+        <div>
+          <h2>Easy download & share</h2>
+          <p>Let users download invitations and share them instantly across social media and messaging apps.</p>
+        </div>
+      </div>
+
+      <div class="share-row">
+        <div class="share-panel">
+          <h3 style="margin:0 0 8px;">One-click export</h3>
+          <p style="margin:0;color:var(--muted);">Make it simple for users to save and send their invitation in the format they need.</p>
+
+          <div class="action-list">
+            <div class="action">
+              <div><strong>Download video</strong><small>MP4 for WhatsApp, Instagram, and email</small></div>
+              <div class="tag">HD</div>
+            </div>
+            <div class="action">
+              <div><strong>Download card</strong><small>PNG or JPG for quick sharing</small></div>
+              <div class="tag">Fast</div>
+            </div>
+            <div class="action">
+              <div><strong>Copy invite link</strong><small>Share a public link with guests</small></div>
+              <div class="tag">Link</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="share-panel">
+          <h3 style="margin:0 0 8px;">Share everywhere</h3>
+          <p style="margin:0;color:var(--muted);">Designed for the places people already use every day.</p>
+
+          <div class="action-list">
+            <div class="action"><div><strong>WhatsApp</strong><small>Perfect for family groups</small></div><div class="tag">Chat</div></div>
+            <div class="action"><div><strong>Instagram</strong><small>Stories, reels, and posts</small></div><div class="tag">Social</div></div>
+            <div class="action"><div><strong>Facebook</strong><small>Event sharing for wider reach</small></div><div class="tag">Event</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      © 2026 Easy Card Maker • AI invitation templates for Indian weddings and celebrations.
+    </div>
+  </main>
+</body>
+          </html>
